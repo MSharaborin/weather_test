@@ -66,11 +66,12 @@ class Weather(models.Model):
 	main = models.ForeignKey('Main', on_delete=models.CASCADE)
 	wind = models.ForeignKey('Wind', on_delete=models.CASCADE)
 	coord = models.ForeignKey('Coord', on_delete=models.CASCADE)
-	dt = models.DateTimeField("Дата", unique=True)
+	dt = models.DateTimeField("Дата")
 
 	class Meta:
 		verbose_name = 'Погода'
 		verbose_name_plural = 'Погода'
+		unique_together = [('name', 'dt')]
 
 	def __str__(self):
 		return 'Погода в городе {}, дата: {}'.format(self.name, self.dt)

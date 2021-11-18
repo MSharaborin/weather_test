@@ -4,6 +4,7 @@ from datetime import datetime
 from asgiref.sync import sync_to_async
 from ninja import Router
 import httpx
+from ninja.errors import HttpError
 
 from .scheme import WeatherSchema
 from .models import Weather, Main, Wind, Coord
@@ -13,49 +14,69 @@ api_weather = Router(tags=['Weather API'])
 
 
 @api_weather.get('/weather/{city}/{country_code}/', response=WeatherSchema)
-async def get_weather(request, city: str, country_code: str, dt: datetime = None):
+async def get_weather(
+		request,
+		city: str,
+		country_code: str,
+		dt: datetime = None
+):
 	"""
-		/{city}/{country_code}/
-		city: str, country_code: str
-	:return:
-	"""
+	# API для работы с ресурсом.
+		https://api.openweathermap.org/data/2.5/weather
 
-	try:
-		data = await get_weather_from_db(city, dt)
-		return data
-	except:
+		Бесплатная подписка позволяет получать: "Текущие данные о погоде".
+
+	## Обязательные поля:
+	****
+		city: str (город)
+		country_code: str (код страны)
+	## Необязательное поле:
+	****
+		dt: datetime (дата)
+		Данное поле для поиска в БД по дате.
+
+	"""
+	if dt is not None:
+		return await get_weather_from_db(city, dt)
+	else:
 		data = await task(city, country_code)
-		await create_weather(*data)
-		return dict(*data)
+		if data[0].get('cod') == '404':
+			raise HttpError(404, 'Not Found')
+		else:
+			await create_weather(*data)
+			return dict(*data)
 
 
 @sync_to_async
 def get_weather_from_db(city, dt):
-	result = Weather.objects.get(name=city, dt=dt)
-	return WeatherSchema.from_orm(result)
+	data = Weather.objects.get(name=city.capitalize(), dt=dt)
+	return WeatherSchema.from_orm(data)
 
 
 @sync_to_async
 def create_weather(weather):
 	ws = WeatherSchema.parse_obj(weather)
-	main = Main.objects.create(**ws.main.dict())
-	coord = Coord.objects.create(**ws.coord.dict())
-	wind = Wind.objects.create(**ws.wind.dict())
-	return Weather.objects.create(
-		name = ws.name,
-		visibility = ws.visibility,
-		main = main,
-		wind = wind,
-		coord = coord,
-		dt = ws.dt
-	)
+	try:
+		main = Main.objects.create(**ws.main.dict())
+		coord = Coord.objects.create(**ws.coord.dict())
+		wind = Wind.objects.create(**ws.wind.dict())
+		return Weather.objects.create(
+			name = ws.name,
+			visibility = ws.visibility,
+			main = main,
+			wind = wind,
+			coord = coord,
+			dt = ws.dt
+		)
+	except:
+		return Weather.objects.get(name=ws.name, dt=ws.dt)
 
 
 async def request(client, city, country_code):
 	token = '0d487576bb305f408d49d6bf7872d7f9'
-	URL = f"https://api.openweathermap.org/data/2.5/weather?q={city},{country_code}&appid={token}&units=metric"
+	URL = f"https://api.openweathermap.org/data/2.5/weather?q=" \
+	      f"{city},{country_code}&appid={token}&units=metric"
 	response = await client.get(URL)
-	print(response.status_code)
 	return response.json()
 
 

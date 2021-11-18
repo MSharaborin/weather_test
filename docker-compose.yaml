@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    image: api_weather
+    container_name: api_family
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && uvicorn family_doctor.asgi:application --host 0.0.0.0 --port 8000"
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    volumes:
+      - ./:/test_family_doctor
+  db:
+    image: postgres:latest
+    container_name: db_postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: weather
+    ports:
+     - 34000:5432
+#
