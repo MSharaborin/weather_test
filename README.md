@@ -14,11 +14,11 @@
    family_doctor.settings => uncomment => Databases: docker host and port 
 
          
-      docker-compose up -d
+         docker-compose up -d
 
 2. Start in console
 
    family_doctor.settings => uncomment => Databases: localhost host and port 
    
 
-      uvicorn family_doctor.asgi:application
+         uvicorn family_doctor.asgi:application
