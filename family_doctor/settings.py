@@ -70,11 +70,11 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
 
-        # 'HOST': 'db', # docker test
-        # 'PORT': 5432, # docker test
+        'HOST': 'db', # docker test
+        'PORT': 5432, # docker test
 
-        'HOST': 'localhost', # localhost_test
-        'PORT': 34000, # localhost_test
+        # 'HOST': 'localhost', # localhost_test
+        # 'PORT': 34000, # localhost_test
     },
 }
 
