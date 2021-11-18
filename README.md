@@ -3,9 +3,13 @@
 
 ### Requirements
 ****
-    django-ninja==0.16.1
-    pytest==6.2.5
-    httpx==0.21.0
+      django-ninja==0.16.1
+      pytest==6.2.5
+      pytest-django==4.4.0
+      pytest-asyncio==0.16.0
+      httpx==0.21.0
+      psycopg2-binary==2.9.2
+      uvicorn==0.15.0
 
 ### How start
 ****
