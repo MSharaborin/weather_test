@@ -26,3 +26,13 @@
    
 
          uvicorn family_doctor.asgi:application
+
+3. Start Test
+   
+      For Unix system
+   
+         pytest -v tests/test_api.pi
+
+      For Windows system
+   
+         pytest -v tests\test_api.pi

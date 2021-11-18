@@ -11,15 +11,15 @@ services:
       - db
     volumes:
       - ./:/test_family_doctor
+    env_file:
+      - .envfile
   db:
     image: postgres:latest
     container_name: db_postgres
     volumes:
       - ./data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: weather
+    env_file:
+      - .envfile
     ports:
      - 34000:5432
 #

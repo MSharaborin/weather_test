@@ -1,0 +1,7 @@
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=weather
+
+SECRET_KEY=django-insecure-oty*epf(kip%e--589r895h(_j&uy@5dbbwigx(1#)!@!v4dy+
+
+TOKEN=0d487576bb305f408d49d6bf7872d7f9
