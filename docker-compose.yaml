@@ -22,4 +22,3 @@ services:
       - .envfile
     ports:
      - 34000:5432
-#
