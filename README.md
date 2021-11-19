@@ -1,6 +1,5 @@
 # Getting started
 ****
-
 ### Requirements
 ****
       django-ninja==0.16.1
@@ -10,6 +9,10 @@
       httpx==0.21.0
       psycopg2-binary==2.9.2
       uvicorn==0.15.0
+
+### Documentation
+
+         http://localhost:8000/api/v1/docs/
 
 ### How start
 ****
