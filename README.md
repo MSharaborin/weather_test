@@ -12,7 +12,7 @@
 
 ### Documentation
 
-         http://localhost:8000/api/v1/docs/
+         http://localhost:8000/api/v1/docs
 
 ### How start
 ****
